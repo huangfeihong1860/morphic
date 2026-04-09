@@ -158,38 +158,50 @@ async function fetchJson(
   return (await response.json()) as Record<string, any>
 }
 
+// export async function fetchOpenAIModels(): Promise<Model[]> {
+//   if (!isProviderEnabled('openai')) {
+//     return []
+//   }
+
+//   try {
+//     // 1. 修改这里，让它支持你在 Vercel 配的 OPENAI_API_BASE
+//     const baseUrl = process.env.OPENAI_API_BASE || 'https://openai.com'
+//     const json = await fetchJson(`${baseUrl}`, {
+//       Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
+//     })
+
+//     const data = Array.isArray(json?.data) ? json.data : []
+//     return sortModels(
+//       dedupeModels(
+//         data
+//           .map(item => String(item?.id ?? ''))
+//           .filter(Boolean)
+//           //.filter(passesOpenAIFilters)
+//           .map(id => ({
+//             id,
+//             name: id,
+//             provider: 'OpenAI',
+//             providerId: 'openai'
+//           }))
+//       )
+//     )
+//   } catch (error) {
+//     console.warn('[ModelFetch] Failed to fetch OpenAI models:', error)
+//     return []
+//   }
+// }
 export async function fetchOpenAIModels(): Promise<Model[]> {
-  if (!isProviderEnabled('openai')) {
-    return []
-  }
-
-  try {
-    // 1. 修改这里，让它支持你在 Vercel 配的 OPENAI_API_BASE
-    const baseUrl = process.env.OPENAI_API_BASE || 'https://openai.com'
-    const json = await fetchJson(`${baseUrl}`, {
-      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
-    })
-
-    const data = Array.isArray(json?.data) ? json.data : []
-    return sortModels(
-      dedupeModels(
-        data
-          .map(item => String(item?.id ?? ''))
-          .filter(Boolean)
-          //.filter(passesOpenAIFilters)
-          .map(id => ({
-            id,
-            name: id,
-            provider: 'OpenAI',
-            providerId: 'openai'
-          }))
-      )
-    )
-  } catch (error) {
-    console.warn('[ModelFetch] Failed to fetch OpenAI models:', error)
-    return []
-  }
+  // 直接返回你要的模型，不再请求 API，彻底解决 401/404/JSON 报错
+  return [
+    {
+      id: 'meta-llama/llama-3.3-70b-instruct:free',
+      name: 'Llama 3.3 70B (Free)',
+      provider: 'OpenAI',
+      providerId: 'openai'
+    }
+  ]
 }
+
 
 export async function fetchAnthropicModels(): Promise<Model[]> {
   if (!isProviderEnabled('anthropic')) {
