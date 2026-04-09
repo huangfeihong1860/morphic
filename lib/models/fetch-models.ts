@@ -164,7 +164,9 @@ export async function fetchOpenAIModels(): Promise<Model[]> {
   }
 
   try {
-    const json = await fetchJson('https://api.openai.com/v1/models', {
+    // 1. 修改这里，让它支持你在 Vercel 配的 OPENAI_API_BASE
+    const baseUrl = process.env.OPENAI_API_BASE || 'https://openai.com'
+    const json = await fetchJson(`${baseUrl}/models`, {
       Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
     })
 
@@ -174,7 +176,7 @@ export async function fetchOpenAIModels(): Promise<Model[]> {
         data
           .map(item => String(item?.id ?? ''))
           .filter(Boolean)
-          .filter(passesOpenAIFilters)
+          //.filter(passesOpenAIFilters)
           .map(id => ({
             id,
             name: id,
