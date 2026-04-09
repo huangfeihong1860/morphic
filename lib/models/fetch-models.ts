@@ -166,7 +166,7 @@ export async function fetchOpenAIModels(): Promise<Model[]> {
   try {
     // 1. 修改这里，让它支持你在 Vercel 配的 OPENAI_API_BASE
     const baseUrl = process.env.OPENAI_API_BASE || 'https://openai.com'
-    const json = await fetchJson(`${baseUrl}/api/v1`, {
+    const json = await fetchJson(`${baseUrl}/api/v1/chat/completions`, {
       Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
     })
 
